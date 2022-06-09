@@ -23,7 +23,7 @@ const ResetStyle = createGlobalStyle`
         --error-color-900: #d93025;
 
         --toastify-color-light: ${(props) => props.theme.colors.secondary[900]};
-        --toastify-color-dark: ${(props) => props.theme.colors.secondary[900]};
+        --toastify-color-dark: ${(props) => props.theme.colors.secondary[100]};
         --toastify-color-info: #3498db;
         --toastify-color-success: #89f58c;
         --toastify-color-warning: #ebbb49;
@@ -38,10 +38,10 @@ const ResetStyle = createGlobalStyle`
     }
 
     .App {
+
       width: 100vw;
       min-height: 100vh;
       height: max-content;
-      padding: 0px 15px;
 
       display: flex;
       flex-direction: column;
@@ -50,9 +50,6 @@ const ResetStyle = createGlobalStyle`
       background-color: var(--primary-color-900);
       color: var(--terciary-color-100);
 
-      @media (min-width: 760px){
-        padding: 0px 100px;
-      }
     }
 
 `;

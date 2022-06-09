@@ -1,0 +1,12 @@
+{
+  "conventionalCommits.scopes": [
+    "utils",
+    "styles",
+    "services",
+    "assets",
+    "components",
+    "providers",
+    "pages",
+    "settings.json"
+  ]
+}

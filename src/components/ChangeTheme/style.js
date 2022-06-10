@@ -7,21 +7,30 @@ export const Button = styled.button`
 
   border: none;
   border-radius: 100%;
-  box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.3);
 
   display: flex;
   justify-content: center;
   align-items: center;
 
-  position: absolute;
+  position: ${(props) => props.position || "absolute"};
   bottom: 15px;
   right: ${(props) => props.right || "none"};
   left: ${(props) => props.left || "none"};
 
-  background-color: var(--terciary-color-100);
+  background: ${(props) =>
+    props.backgroundColor || "var(--terciary-color-100)"};
 
   &:hover {
     cursor: pointer;
-    background-color: var(--terciary-color-900);
+    background: ${(props) =>
+      props.backgroundColor || "var(--terciary-color-900)"};
+
+    .themeModeIco {
+      color: var(--primary-color-100);
+    }
+  }
+
+  .themeModeIco {
+    color: var(--primary-color-900);
   }
 `;

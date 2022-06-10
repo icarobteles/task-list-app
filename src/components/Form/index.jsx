@@ -14,8 +14,9 @@ import { Link, useLocation } from "react-router-dom";
 import ShowPassword from "../ShowPassword";
 import { useAuth } from "../../providers/auth";
 import { useUser } from "../../providers/user";
+import { Fragment } from "react";
 
-const Form = ({ inputsDetails, setInputDetails, schema, setRender }) => {
+const Form = ({ inputsDetails, setInputDetails, schema }) => {
   const {
     register,
     handleSubmit,
@@ -49,10 +50,7 @@ const Form = ({ inputsDetails, setInputDetails, schema, setRender }) => {
       if (newData.passwordConfirmation) {
         newData.passwordConfirmation = undefined;
       }
-      const response = await changeUserInfos(newData);
-      if (response) {
-        setRender("personalInfoCard");
-      }
+      await changeUserInfos(newData);
     }
   };
 
@@ -61,11 +59,8 @@ const Form = ({ inputsDetails, setInputDetails, schema, setRender }) => {
       <h2>{formName}</h2>
 
       {inputsDetails.map((inputDetail, index) => (
-        <>
-          <InputContainer
-            key={`${formType}Form${inputDetail.name}`}
-            error={errors[inputDetail.name]}
-          >
+        <Fragment key={`${formType}Form${inputDetail.name}[${index}]`}>
+          <InputContainer error={errors[inputDetail.name]}>
             <Input
               {...inputDetail}
               error={errors[inputDetail.name]}
@@ -80,46 +75,34 @@ const Form = ({ inputsDetails, setInputDetails, schema, setRender }) => {
             )}
           </InputContainer>
           {errors[inputDetail.name] && (
-            <ShowError key={`${formType}FormError${inputDetail.name}`}>
-              {errors[inputDetail.name].message}
-            </ShowError>
+            <ShowError>{errors[inputDetail.name].message}</ShowError>
           )}
-        </>
+        </Fragment>
       ))}
 
       <Button type="submit" errors={Object.keys(errors).length}>
         {formName}
       </Button>
-      <Account>
-        {formType === "/register" && (
-          <>
-            Já tem uma conta?
-            <strong>
-              <Link to="/login">Faça seu login aqui</Link>
-            </strong>
-          </>
-        )}
-        {formType === "/login" && (
-          <>
-            Ainda não tem uma conta?
-            <strong>
-              <Link to="/register">Faça seu cadastro aqui</Link>
-            </strong>
-          </>
-        )}
-        {formType === "/admin/profile" && (
-          <>
-            <strong>
-              <button
-                type="button"
-                onClick={() => setRender("personalInfoCard")}
-              >
-                Ver Minhas Informações
-              </button>
-            </strong>
-          </>
-        )}
-      </Account>
+      {(formType === "/register" || formType === "/login") && (
+        <Account>
+          {formType === "/register" && (
+            <>
+              Já tem uma conta?
+              <strong>
+                <Link to="/login">Faça seu login aqui</Link>
+              </strong>
+            </>
+          )}
+          {formType === "/login" && (
+            <>
+              Ainda não tem uma conta?
+              <strong>
+                <Link to="/register">Faça seu cadastro aqui</Link>
+              </strong>
+            </>
+          )}
+        </Account>
+      )}
     </FormContainer>
   );
 };

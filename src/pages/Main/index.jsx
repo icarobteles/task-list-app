@@ -1,5 +1,11 @@
+import Menu from "../../components/Menu";
+
 const MainPage = () => {
-  return <h1>Main Page</h1>;
+  return (
+    <>
+      <Menu />
+    </>
+  );
 };
 
 export default MainPage;

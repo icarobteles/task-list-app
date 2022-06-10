@@ -7,6 +7,7 @@ const ThemeManagerContext = createContext();
 export const ThemeManagerProvider = ({ children }) => {
   const [currentTheme, setCurrentTheme] = useState("dark");
   const [currentLogo, setCurrentLogo] = useState(logoDark);
+  const [opositeLogo, setOpositeLogo] = useState(logoLight);
 
   const getOpositeTheme = useCallback(
     () => (currentTheme === "light" ? "dark" : "light"),
@@ -20,12 +21,13 @@ export const ThemeManagerProvider = ({ children }) => {
 
   const changeTheme = () => {
     setCurrentTheme(getOpositeTheme());
+    setOpositeLogo(currentLogo);
     setCurrentLogo(getOpositeLogo());
   };
 
   return (
     <ThemeManagerContext.Provider
-      value={{ currentTheme, changeTheme, currentLogo }}
+      value={{ currentTheme, changeTheme, currentLogo, opositeLogo }}
     >
       {children}
     </ThemeManagerContext.Provider>

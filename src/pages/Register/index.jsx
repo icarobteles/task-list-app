@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
-import Form from "../../components/Form";
-import { registerSchema } from "../../utils/schemas/auth";
-import { LogoContainer, RegisterContainer } from "./style";
-
-import LogoDark from "../../assets/images/logoDark.svg";
-import LogoLight from "../../assets/images/logoLight.svg";
-import { useAuth } from "../../providers/auth";
 import { useNavigate } from "react-router-dom";
-import { useThemeManager } from "../../providers/theme";
+
+import { registerSchema } from "../../utils/schemas/auth";
+import { useAuth } from "../../providers/auth";
+
+//COMPONENTS
+import Form from "../../components/Form";
 import ChangeThemeButton from "../../components/ChangeTheme";
+import Logo from "../../components/Logo";
+
+//STYLED COMPONENTS
+import { RegisterContainer } from "./style";
 
 const RegisterPage = () => {
   const [inputsDetails, setInputDetails] = useState([
@@ -39,13 +41,13 @@ const RegisterPage = () => {
   ]);
 
   const { token } = useAuth();
-  const { currentLogo, changeTheme } = useThemeManager();
   let navigate = useNavigate();
 
   useEffect(() => {
     if (token) {
       navigate("/admin/main");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   return (
@@ -54,14 +56,9 @@ const RegisterPage = () => {
         inputsDetails={inputsDetails}
         setInputDetails={setInputDetails}
         schema={registerSchema}
+        formConfig={{ formType: "register", formName: "Cadastro" }}
       />
-      <LogoContainer>
-        <h1>
-          Lista de Tarefas
-          <span>Organize sua rotina de forma ágil e prática</span>
-        </h1>
-        <img src={currentLogo} alt="Logo da Aplicação" />
-      </LogoContainer>
+      <Logo />
       <ChangeThemeButton right="15px" />
     </RegisterContainer>
   );

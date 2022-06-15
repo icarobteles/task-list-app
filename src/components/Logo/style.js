@@ -7,7 +7,7 @@ export const LogoContainer = styled.div`
   animation: ${Show} 2s 1;
 
   h1 {
-    text-align: right;
+    text-align: ${(props) => (props.flexReverse ? "left" : "right")};
     font-weight: 900;
     font-size: ${(props) => props.theme.fontSizes["4xl"]};
 

@@ -10,7 +10,7 @@ import Modal from "../../components/Modal";
 import Form from "../../components/Form";
 
 //STYLED COMPONENTS
-import { MainContainer } from "./style";
+import { EmptyContainer, MainContainer } from "./style";
 
 //REACT-ICONS
 import { MdAddTask } from "react-icons/md";
@@ -68,7 +68,11 @@ const MainPage = () => {
             <MdAddTask size="1.5rem" className="addTaskIcon" />
           </button>
         </div>
-        {userInfos.tasks.length > 0 && <TaskList tasks={userInfos.tasks} />}
+        {userInfos.tasks.length > 0 ? (
+          <TaskList tasks={userInfos.tasks} />
+        ) : (
+          <EmptyContainer></EmptyContainer>
+        )}
         {openModal && (
           <Modal setClose={() => setOpenModal(false)}>
             <Form

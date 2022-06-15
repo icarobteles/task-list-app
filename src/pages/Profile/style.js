@@ -13,8 +13,8 @@ export const MainContainer = styled.main`
 `;
 
 export const ProfileContainer = styled.section`
-  width: auto;
-  max-width: 300px;
+  width: 100%;
+  max-width: 360px;
 
   display: flex;
   flex-direction: column;
@@ -34,7 +34,7 @@ export const ProfileContainer = styled.section`
 
   .userInfosSection {
     width: 100%;
-    padding: 20px 30px;
+    padding: 20px 10px;
 
     display: flex;
     justify-content: flex-start;
@@ -42,6 +42,11 @@ export const ProfileContainer = styled.section`
     gap: 30px;
 
     border-bottom: 1px solid var(--terciary-color-100);
+
+    p {
+      max-width: calc(100% - 46px);
+      word-wrap: break-word;
+    }
   }
 
   .actions {

@@ -66,3 +66,8 @@ export const MainContainer = styled.main`
     }
   }
 `;
+
+export const EmptyContainer = styled.div`
+  width: 100%;
+  height: 480px;
+`;

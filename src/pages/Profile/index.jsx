@@ -1,9 +1,27 @@
 import { useEffect, useState } from "react";
-import Menu from "../../components/Menu";
-import { useUser } from "../../providers/user";
-import { MainContainer, ProfileContainer } from "./style";
 import { useNavigate } from "react-router-dom";
+
+import { useUser } from "../../providers/user";
 import { useAuth } from "../../providers/auth";
+import {
+  changePasswordSchema,
+  personalInfosSchema,
+} from "../../utils/schemas/user";
+
+//COMPONENTS
+import Menu from "../../components/Menu";
+import Form from "../../components/Form";
+import Modal from "../../components/Modal";
+
+//STYLED COMPONENTS
+import { MainContainer, ProfileContainer } from "./style";
+
+//REACT-ICONS
+import {
+  BsFillCheckCircleFill,
+  BsFillExclamationCircleFill,
+  BsFillXCircleFill,
+} from "react-icons/bs";
 import {
   FaUserCircle,
   FaUserAlt,
@@ -11,20 +29,10 @@ import {
   FaExpeditedssl,
 } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
-import {
-  BsFillCheckCircleFill,
-  BsFillExclamationCircleFill,
-  BsFillXCircleFill,
-} from "react-icons/bs";
-import Form from "../../components/Form";
-import Modal from "../../components/Modal";
-import {
-  changePasswordSchema,
-  personalInfosSchema,
-} from "../../utils/schemas/user";
 
 const ProfilePage = () => {
   const { userInfos } = useUser();
+
   const [tasksStats, setTasksStats] = useState({
     total: 0,
     completed: 0,
@@ -73,7 +81,6 @@ const ProfilePage = () => {
       placeholder: "Confirme sua Senha *",
     },
   ]);
-
   const [openModal, setOpenModal] = useState({
     name: "",
     open: false,
@@ -84,8 +91,9 @@ const ProfilePage = () => {
 
   useEffect(() => {
     if (!token) {
-      navigate("/login");
+      navigate("/");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   useEffect(() => {
@@ -96,11 +104,11 @@ const ProfilePage = () => {
         return e;
       });
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfos]);
 
   const handleTaskStatistics = () => {
     const { tasks } = userInfos;
-    console.log(tasks);
 
     const completedTasks = tasks.filter((task) => task.isCompleted);
     const overdueTasks = tasks.filter((task) => {
@@ -130,6 +138,7 @@ const ProfilePage = () => {
   return (
     <>
       <Menu />
+
       <MainContainer>
         <ProfileContainer>
           <section className="logoProfileContainer">
@@ -146,26 +155,28 @@ const ProfilePage = () => {
           <section className="userInfosSection">
             <BsFillCheckCircleFill color="var(--positive-color-900)" />
             <p>
-              {tasksStats.completed}{" "}
-              {tasksStats.completed > 1
-                ? "tarefas completas"
-                : "tarefa completa"}
+              {tasksStats.completed}
+              {tasksStats.completed !== 1
+                ? " tarefas completas"
+                : " tarefa completa"}
             </p>
           </section>
           <section className="userInfosSection">
             <BsFillExclamationCircleFill color="var(--alert-color-900)" />
             <p>
-              {tasksStats.overdue}{" "}
-              {tasksStats.overdue > 1 ? "tarefas atrasadas" : "tarefa atrasada"}
+              {tasksStats.overdue}
+              {tasksStats.overdue !== 1
+                ? " tarefas atrasadas"
+                : " tarefa atrasada"}
             </p>
           </section>
           <section className="userInfosSection">
             <BsFillXCircleFill color="var(--error-color-900)" />
             <p>
-              {tasksStats.incomplete}{" "}
-              {tasksStats.incomplete > 1
-                ? "tarefas incompletas"
-                : "tarefa incompletas"}
+              {tasksStats.incomplete}
+              {tasksStats.incomplete !== 1
+                ? " tarefas incompletas"
+                : " tarefa incompleta"}
             </p>
           </section>
           <section className="actions">
@@ -188,6 +199,7 @@ const ProfilePage = () => {
           </section>
         </ProfileContainer>
       </MainContainer>
+
       {openModal.open && (
         <Modal
           setClose={() => {
@@ -199,6 +211,11 @@ const ProfilePage = () => {
               inputsDetails={inputsPersonalInfos}
               setInputDetails={setInputsPersonalInfos}
               schema={personalInfosSchema}
+              formConfig={{
+                formType: "updateUserInfos",
+                formName: "Editar Usuário",
+              }}
+              setClose={() => setOpenModal(false)}
             />
           )}
           {openModal.name === "changePassword" && (
@@ -206,6 +223,11 @@ const ProfilePage = () => {
               inputsDetails={inputsChangePasswords}
               setInputDetails={setInputsChangePasswords}
               schema={changePasswordSchema}
+              formConfig={{
+                formType: "updateUserInfos",
+                formName: "Alterar Senha",
+              }}
+              setClose={() => setOpenModal(false)}
             />
           )}
         </Modal>

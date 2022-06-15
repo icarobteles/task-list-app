@@ -15,6 +15,7 @@ export const FormContainer = styled.form`
   animation: ${Show} 2s 1;
 
   h2 {
+    text-align: center;
     font-size: ${(props) => props.theme.fontSizes["3xl"]};
     text-transform: uppercase;
     margin-bottom: 40px;
@@ -64,6 +65,13 @@ export const Input = styled.input`
       props.error ? "var(--error-color-900)" : "var(--terciary-color-900)"};
   }
 
+  &::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    ${(props) =>
+      props.currentTheme === "dark" && "filter: invert(1) brightness(1);"}
+    ${(props) => props.currentTheme === "light" && "filter: none;"}
+  }
+
   &:focus {
     outline: none;
     border-color: ${(props) =>
@@ -85,6 +93,97 @@ export const Input = styled.input`
   }
 
   @media (min-width: 1440px) {
+    border: 1px solid
+      ${(props) =>
+        props.error ? "var(--error-color-900)" : "var(--primary-color-900)"};
+    color: ${(props) =>
+      props.error ? "var(--error-color-900)" : "var(--primary-color-900)"};
+
+    &::placeholder {
+      color: ${(props) =>
+        props.error ? "var(--error-color-900)" : "var(--primary-color-900)"};
+    }
+
+    &::-webkit-calendar-picker-indicator {
+      ${(props) =>
+        props.currentTheme === "light" && "filter: invert(1) brightness(1);"}
+      ${(props) => props.currentTheme === "dark" && "filter: none;"}
+    }
+
+    &:focus {
+      border-color: ${(props) =>
+        props.error ? "var(--error-color-900)" : "var(--primary-color-100)"};
+      color: ${(props) =>
+        props.error ? "var(--error-color-900)" : "var(--primary-color-100)"};
+
+      &::placeholder {
+        color: ${(props) =>
+          props.error ? "var(--error-color-900)" : "var(--primary-color-100)"};
+      }
+
+      ~ button {
+        .ico {
+          color: ${(props) =>
+            props.error
+              ? "var(--error-color-900)"
+              : "var(--primary-color-100)"};
+        }
+      }
+    }
+  }
+`;
+
+export const Select = styled.select`
+  width: 100%;
+  height: 40px;
+  padding: 10px;
+
+  background-color: transparent;
+  border: 1px solid
+    ${(props) =>
+      props.error ? "var(--error-color-900)" : "var(--terciary-color-900)"};
+
+  font-size: ${(props) => props.theme.fontSizes["md"]};
+  font-weight: 400;
+  color: ${(props) =>
+    props.error ? "var(--error-color-900)" : "var(--terciary-color-100)"};
+
+  &::placeholder {
+    color: ${(props) =>
+      props.error ? "var(--error-color-900)" : "var(--terciary-color-900)"};
+  }
+
+  &:focus {
+    outline: none;
+    border-color: ${(props) =>
+      props.error ? "var(--error-color-900)" : "var(--terciary-color-100)"};
+    color: ${(props) =>
+      props.error ? "var(--error-color-900)" : "var(--terciary-color-100)"};
+
+    &::placeholder {
+      color: ${(props) =>
+        props.error ? "var(--error-color-900)" : "var(--terciary-color-100)"};
+    }
+
+    ~ button {
+      .ico {
+        color: ${(props) =>
+          props.error ? "var(--error-color-900)" : "var(--terciary-color-900)"};
+      }
+    }
+  }
+
+  option {
+    background-color: var(--primary-color-900);
+    color: var(--terciary-color-100);
+  }
+
+  @media (min-width: 1440px) {
+    option {
+      background-color: var(--terciary-color-900);
+      color: var(--primary-color-900);
+    }
+
     border: 1px solid
       ${(props) =>
         props.error ? "var(--error-color-900)" : "var(--primary-color-900)"};

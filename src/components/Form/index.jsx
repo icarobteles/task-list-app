@@ -1,3 +1,15 @@
+import { Fragment } from "react";
+import { Link, useLocation } from "react-router-dom";
+
+import { useAuth } from "../../providers/auth";
+import { useUser } from "../../providers/user";
+import { useThemeManager } from "../../providers/theme";
+import { createTask, editTask } from "../../services/task/task";
+
+//COMPONENTS
+import ShowPassword from "../ShowPassword";
+
+//STYLED COMPONENTS
 import {
   Account,
   Button,
@@ -5,18 +17,21 @@ import {
   InputContainer,
   Input,
   ShowError,
+  Select,
 } from "./style";
 
 //VALIDATION FORM
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Link, useLocation } from "react-router-dom";
-import ShowPassword from "../ShowPassword";
-import { useAuth } from "../../providers/auth";
-import { useUser } from "../../providers/user";
-import { Fragment } from "react";
 
-const Form = ({ inputsDetails, setInputDetails, schema }) => {
+const Form = ({
+  inputsDetails,
+  setInputDetails,
+  schema,
+  task,
+  setClose,
+  formConfig,
+}) => {
   const {
     register,
     handleSubmit,
@@ -25,32 +40,38 @@ const Form = ({ inputsDetails, setInputDetails, schema }) => {
     resolver: yupResolver(schema),
   });
 
-  const { handleAuth } = useAuth();
-  const { changeUserInfos } = useUser();
+  const { handleAuth, token, userId } = useAuth();
+  const { changeUserInfos, getUserInfos } = useUser();
+  const { currentTheme } = useThemeManager();
 
-  let location = useLocation();
-  const formType = location.pathname;
-  const formName =
-    formType === "/login"
-      ? "Login"
-      : formType === "/register"
-      ? "Cadastro"
-      : "Editar";
+  const { formType, formName } = formConfig;
 
   const onSubmit = async (data) => {
-    if (formType === "/login") {
+    if (formType === "login") {
       //LOGIN
       await handleAuth(data, "/auth/login");
-    } else if (formType === "/register") {
+    } else if (formType === "register") {
       //REGISTER
       await handleAuth(data, "/auth/register");
-    } else {
+    } else if (formType === "updateUserInfos") {
       //UPDATE USERINFOS
       let newData = { ...data };
       if (newData.passwordConfirmation) {
         newData.passwordConfirmation = undefined;
       }
       await changeUserInfos(newData);
+    } else if (formType === "editTask") {
+      let newData = { ...data, isCompleted: task.isCompleted };
+      if (data.estimatedCompletedDate === "") {
+        newData.estimatedCompletedDate = undefined;
+      }
+      await editTask(task._id, token, newData);
+      await getUserInfos();
+      setClose();
+    } else if (formType === "addTask") {
+      await createTask(userId, token, data);
+      await getUserInfos();
+      setClose();
     }
   };
 
@@ -60,13 +81,31 @@ const Form = ({ inputsDetails, setInputDetails, schema }) => {
 
       {inputsDetails.map((inputDetail, index) => (
         <Fragment key={`${formType}Form${inputDetail.name}[${index}]`}>
-          <InputContainer error={errors[inputDetail.name]}>
-            <Input
-              {...inputDetail}
-              error={errors[inputDetail.name]}
-              {...register(inputDetail.name)}
-            />
-            {inputDetail.name.match(/[pP]assword/) && (
+          <InputContainer
+            error={errors[inputDetail.name || inputDetail.select.name]}
+          >
+            {inputDetail.type === "select" ? (
+              <Select
+                {...inputDetail.select}
+                error={errors[inputDetail.select.name]}
+                {...register(inputDetail.select.name)}
+              >
+                <option value="" disabled>
+                  {inputDetail.placeholder}
+                </option>
+                {inputDetail.options.map((option) => (
+                  <option value={option}>{option}</option>
+                ))}
+              </Select>
+            ) : (
+              <Input
+                currentTheme={currentTheme}
+                {...inputDetail}
+                error={errors[inputDetail.name]}
+                {...register(inputDetail.name)}
+              />
+            )}
+            {inputDetail.name?.match(/[pP]assword/) && (
               <ShowPassword
                 error={errors[inputDetail.name]}
                 inputDetail={inputDetail}
@@ -74,8 +113,10 @@ const Form = ({ inputsDetails, setInputDetails, schema }) => {
               />
             )}
           </InputContainer>
-          {errors[inputDetail.name] && (
-            <ShowError>{errors[inputDetail.name].message}</ShowError>
+          {errors[inputDetail.name || inputDetail.select.name] && (
+            <ShowError>
+              {errors[inputDetail.name || inputDetail.select.name].message}
+            </ShowError>
           )}
         </Fragment>
       ))}
@@ -83,17 +124,17 @@ const Form = ({ inputsDetails, setInputDetails, schema }) => {
       <Button type="submit" errors={Object.keys(errors).length}>
         {formName}
       </Button>
-      {(formType === "/register" || formType === "/login") && (
+      {(formType === "register" || formType === "login") && (
         <Account>
-          {formType === "/register" && (
+          {formType === "register" && (
             <>
               Já tem uma conta?
               <strong>
-                <Link to="/login">Faça seu login aqui</Link>
+                <Link to="/">Faça seu login aqui</Link>
               </strong>
             </>
           )}
-          {formType === "/login" && (
+          {formType === "login" && (
             <>
               Ainda não tem uma conta?
               <strong>

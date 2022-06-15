@@ -16,6 +16,8 @@ export const MenuContainer = styled.header`
   top: 0;
   left: 0;
 
+  z-index: 100;
+
   @media (min-width: 1440px) {
     padding: 0px 100px;
   }

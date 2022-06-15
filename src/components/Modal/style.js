@@ -35,7 +35,7 @@ export const ModalContent = styled.div`
   align-items: center;
 
   .close {
-    width: 100%;
+    margin-left: calc(100% - 16px);
     text-align: right;
     font-size: ${(props) => props.theme.fontSizes["md"]};
 

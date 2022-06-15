@@ -21,6 +21,7 @@ const ResetStyle = createGlobalStyle`
         --error-color-100: #d35047;
         --alert-color-900: #ebbb49;
         --error-color-900: #d93025;
+        --info-color-900: #3498db;
 
         --toastify-color-light: ${(props) => props.theme.colors.secondary[900]};
         --toastify-color-dark: ${(props) => props.theme.colors.secondary[100]};
